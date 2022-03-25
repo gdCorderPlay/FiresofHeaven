@@ -1,0 +1,44 @@
+{
+  "configs": [
+    {
+      "type": 0,
+      "hp": 200,
+      "norAtkCD": 25,
+      "preTime": 22,
+      "ghostTime": 30,
+      "atkRange": 1,
+      "range": 1,
+      "BTree": "Root_ParallelNode"
+    },
+    {
+      "type": 1,
+      "hp": 100,
+      "norAtkCD": 15,
+      "preTime": 15,
+      "ghostTime": 30,
+      "atkRange": 1,
+      "range": 1,
+      "BTree": "Root_ParallelNode"
+    },
+    {
+      "type": 2,
+      "hp": 100,
+      "norAtkCD": 20,
+      "preTime": 15,
+      "ghostTime": 30,
+      "atkRange": 10,
+      "range": 1,
+      "BTree": "Root_ParallelNode"
+    },
+    {
+      "type": 3,
+      "hp": 100,
+      "norAtkCD": 15,
+      "preTime": 15,
+      "ghostTime": 30,
+      "atkRange": 1,
+      "range": 1,
+      "BTree": "Root_ParallelNode"
+    }
+  ]
+}

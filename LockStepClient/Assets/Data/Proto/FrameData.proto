@@ -1,0 +1,13 @@
+syntax ="proto3";
+
+option csharp_namespace="Proto.Data";
+package Proto.Data;
+
+message Command{
+int32 playerID=1;
+int32 commandID=2;
+}
+message FrameData{
+int32 frameCount=1;
+repeated Command commands=2;
+}

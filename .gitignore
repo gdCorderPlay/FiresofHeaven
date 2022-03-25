@@ -2,13 +2,21 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
+/LockStepClient/[Ll]ibrary/
+/LockStepClient/[Tt]emp/
+/LockStepClient/[Oo]bj/
+/LockStepClient/[Bb]uild/
+/LockStepClient/[Bb]uilds/
+/LockStepClient/[Ll]ogs/
+/LockStepClient/[Mm]emoryCaptures/
+/LockStepServer/01.Coldairarrow.Util.Sockets/bin/
+/LockStepServer/02.Sockets_Server/bin/
+/LockStepServer/03.Sockets_Client/bin/
+/LockStepServer/LockStepServer/bin/
+/LockStepServer/01.Coldairarrow.Util.Sockets/obj/
+/LockStepServer/02.Sockets_Server/obj/
+/LockStepServer/03.Sockets_Client/obj/
+/LockStepServer/LockStepServer/obj/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -30,7 +38,6 @@ ExportedObj/
 .consulo/
 *.csproj
 *.unityproj
-*.sln
 *.suo
 *.tmp
 *.user

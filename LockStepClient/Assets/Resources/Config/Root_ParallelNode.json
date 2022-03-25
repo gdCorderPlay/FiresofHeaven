@@ -1,0 +1,98 @@
+{
+  "m_Name": "Root_ParallelNode",
+  "m_Nodes": [
+    {
+      "m_ParentIndex": -1,
+      "m_NodeType": 1,
+      "m_NodeSubType": 1,
+      "m_OtherParams": [ 2 ],
+      "m_ActionNodeName": "",
+      "m_NodeName": "Root_ParallelNode",
+      "m_Preconditions": []
+    },
+    {
+      "m_ParentIndex": 0,
+      "m_NodeType": 2,
+      "m_NodeSubType": 0,
+      "m_OtherParams": [],
+      "m_ActionNodeName": "StartActionNode",
+      "m_NodeName": "Start",
+      "m_Preconditions": []
+    },
+    {
+      "m_ParentIndex": 0,
+      "m_NodeType": 1,
+      "m_NodeSubType": 2,
+      "m_OtherParams": [],
+      "m_ActionNodeName": "",
+      "m_NodeName": "TroopAction",
+      "m_Preconditions": []
+    },
+    {
+      "m_ParentIndex": 2,
+      "m_NodeType": 2,
+      "m_NodeSubType": 0,
+      "m_OtherParams": [],
+      "m_ActionNodeName": "FindTargetActionNode",
+      "m_NodeName": "FindTarget",
+      "m_Preconditions": [
+        {
+          "m_ParentIndex": -1,
+          "m_Type": 3,
+          "m_PreconditionName": "BTreeNodePreconditionNOT",
+          "m_ChildIndexs": [ 1 ]
+        },
+        {
+          "m_ParentIndex": 0,
+          "m_Type": 0,
+          "m_PreconditionName": "HasTargetCondition",
+          "m_ChildIndexs": []
+        }
+      ]
+    },
+    {
+      "m_ParentIndex": 2,
+      "m_NodeType": 2,
+      "m_NodeSubType": 0,
+      "m_OtherParams": [],
+      "m_ActionNodeName": "AttackActionNode",
+      "m_NodeName": "Attack",
+      "m_Preconditions": [
+        {
+          "m_ParentIndex": -1,
+          "m_Type": 1,
+          "m_PreconditionName": "BTreeNodePreconditionAND",
+          "m_ChildIndexs": [ 1, 2 ]
+        },
+        {
+          "m_ParentIndex": 0,
+          "m_Type": 0,
+          "m_PreconditionName": "HasTargetCondition",
+          "m_ChildIndexs": []
+        },
+        {
+          "m_ParentIndex": 0,
+          "m_Type": 0,
+          "m_PreconditionName": "IsInAttackRangeCondition",
+          "m_ChildIndexs": []
+        }
+      ]
+    },
+    {
+      "m_ParentIndex": 2,
+      "m_NodeType": 2,
+      "m_NodeSubType": 0,
+      "m_OtherParams": [],
+      "m_ActionNodeName": "MoveToActionNode",
+      "m_NodeName": "MoveTo",
+      "m_Preconditions": [
+        {
+          "m_ParentIndex": -1,
+          "m_Type": 0,
+          "m_PreconditionName": "HasTargetCondition",
+          "m_ChildIndexs": []
+        }
+      ]
+    }
+  ]
+}
