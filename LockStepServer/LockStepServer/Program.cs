@@ -25,23 +25,9 @@ namespace LockStepServer
             server.HandleRecMsg = new Action<byte[], SocketConnection, SocketServer>((bytes, client, theServer) =>
             {
                 int num = frameCount;
-                //Command command = new Command(bytes);
                 Command command = Command.Parser.ParseFrom(bytes);
                 Console.WriteLine(command.CommandID+"::"+command.PlayerID);
                 commandBuffer.Enqueue(command);
-
-                //if (frames.ContainsKey(num))
-                //{
-                //    frames[num].Commands.Add(command);
-                //}
-                //else
-                //{
-                   
-                //    FrameData frame = new FrameData();
-                //    frame.FrameCount = num;
-                //    frame.Commands.Add(command);
-                //    frames.Add(num, frame);
-                //}
             });
 
             //处理服务器启动后事件
@@ -70,10 +56,6 @@ namespace LockStepServer
 
             //服务器启动
             server.StartServer();
-
-           
-            //NetworkServer server = new NetworkServer();
-            //server.Init("127.0.0.1",2333);
 
             Timer aTimer = new Timer();
             aTimer.Elapsed += new ElapsedEventHandler(StepLogic);
