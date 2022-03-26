@@ -15,7 +15,13 @@ public enum SoldierAnimState
 }
 public class MessageID
 {
-    public int Heat = 100;//心跳
-    public int Login = 10001;//
+    public const int Heat = 100;//心跳
+    public const int Login = 10001;//
+
+}
+
+public class StaticDef
+{
+    public static int UID;
 
 }

@@ -8,84 +8,6 @@ using System.Text;
 using System.Threading;
 using Proto.Data;
 using Google.Protobuf;
-//public class Command
-//{
-//    public int playerID;
-//    public int commandID;
-//    public Command()
-//    {
-
-//    }
-//    public Command(byte[] data)
-//    {
-//        playerID = BitConverter.ToInt32(data, 0);
-//        commandID = BitConverter.ToInt32(data, 4);
-//    }
-//    public static Command Convert(byte[] data, ref int offset)
-//    {
-//        Command c = new Command();
-
-//        c.playerID = BitConverter.ToInt32(data, offset);
-//        offset += 4;
-//        c.commandID = BitConverter.ToInt32(data, offset);
-//        offset += 4;
-
-//        return c;
-//    }
-//    public void InsertArray(byte[] data, ref int offset)
-//    {
-//        BitConverter.GetBytes(playerID).CopyTo(data, offset);
-//        offset += 4;
-//        BitConverter.GetBytes(commandID).CopyTo(data, offset);
-//        offset += 4;
-//    }
-
-//    public byte[] GetData()
-//    {
-//        int offset = 0;
-
-//        byte[] data = new byte[8];
-//        InsertArray(data, ref offset);
-//        return data;
-//    }
-//}
-//public class FrameData
-//{
-//    public int frameCount;
-//    public List<Command> commands;
-
-//    public FrameData()
-//    {
-//        commands = new List<Command>();
-
-//    }
-//    public FrameData(byte[] data, int length)
-//    {
-//        int offset = 0;
-//        frameCount = BitConverter.ToInt32(data, offset);
-//        commands = new List<Command>();
-//        offset += 4;
-//        while (offset < length)
-//        {
-//            Command command = Command.Convert(data, ref offset);
-//            commands.Add(command);
-//        }
-
-//    }
-//    public byte[] GetData()
-//    {
-//        int offset = 0;
-
-//        byte[] data = new byte[4 + commands.Count * 8];
-//        BitConverter.GetBytes(frameCount).CopyTo(data, 0);
-//        offset += 4;
-//        for (int i = 0; i < commands.Count; i++)
-//        {
-//            commands[i].InsertArray(data, ref offset);
-//        }
-//        return data;
-//    }
-//}
 
 public class SimpleSocket
 {
@@ -126,12 +48,22 @@ public class SimpleSocket
             }
             byte[] data = new byte[effective];
             Array.Copy( buffer,data, effective);
-            //FrameData frame = new FrameData(buffer,effective);
-            FrameData frame = FrameData.Parser.ParseFrom(data);
-            Loom.AddNetMsgHandle(() =>
+            Server2ClientData serverData = Server2ClientData.Parser.ParseFrom(data);
+            switch (serverData.CommandID)
             {
-                MessageMgr.Instance.SendMsg<FrameData>("LockStepLogic",frame);
-            });
+                case MessageID.Login:
+                    LoginRespond respond = serverData.Data.Unpack<LoginRespond>();
+                    Loom.AddNetMsgHandle(() =>
+                    {
+                        MessageMgr.Instance.SendMsg<LoginRespond>("OnLoginRespond", respond);
+                    });
+                    break; 
+            }
+            //FrameData frame = FrameData.Parser.ParseFrom(data);
+            //Loom.AddNetMsgHandle(() =>
+            //{
+            //    MessageMgr.Instance.SendMsg<FrameData>("LockStepLogic",frame);
+            //});
         }
     }
     public static int playerID=1;
@@ -144,5 +76,10 @@ public class SimpleSocket
         Debug.Log(commandID+"  length:" +data.Length);
         socketClient.Send(data);
         // var temp = socketClient.Send(command.GetData());
+    }
+    public void SendData2Server(Client2ServerData sendData)
+    {
+        byte[] data = sendData.ToByteArray();
+        socketClient.Send(data);
     }
 }

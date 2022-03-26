@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Timers;
 using Google.Protobuf;
+using LockStepServer.Common;
+using Any =Google.Protobuf.WellKnownTypes.Any;
 namespace LockStepServer
 {
     class Program
@@ -24,10 +26,22 @@ namespace LockStepServer
             //处理从客户端收到的消息
             server.HandleRecMsg = new Action<byte[], SocketConnection, SocketServer>((bytes, client, theServer) =>
             {
-                int num = frameCount;
-                Command command = Command.Parser.ParseFrom(bytes);
-                Console.WriteLine(command.CommandID+"::"+command.PlayerID);
-                commandBuffer.Enqueue(command);
+                Client2ServerData data = Client2ServerData.Parser.ParseFrom(bytes);
+                switch (data.CommandID)
+                {
+                    case MessageID.Login:
+                        LoginRespond respond = new LoginRespond();
+                        respond.ID = UIDHelper.GetUID();
+                        Server2ClientData respondData = new Server2ClientData();
+                        respondData.CommandID = MessageID.Login;
+                        respondData.Data = Any.Pack(respond); ;
+                        client.Send(respondData.ToByteArray());
+                        break;
+                }
+                //int num = frameCount;
+                //Command command = Command.Parser.ParseFrom(bytes);
+                //Console.WriteLine(command.CommandID+"::"+command.PlayerID);
+                //commandBuffer.Enqueue(command);
             });
 
             //处理服务器启动后事件
@@ -57,10 +71,10 @@ namespace LockStepServer
             //服务器启动
             server.StartServer();
 
-            Timer aTimer = new Timer();
-            aTimer.Elapsed += new ElapsedEventHandler(StepLogic);
-            aTimer.Interval = 1000/20;    //配置文件中配置的秒数
-            aTimer.Enabled = true;
+            //Timer aTimer = new Timer();
+            //aTimer.Elapsed += new ElapsedEventHandler(StepLogic);
+            //aTimer.Interval = 1000/20;    //配置文件中配置的秒数
+            //aTimer.Enabled = true;
             Console.Read();
         }
 
