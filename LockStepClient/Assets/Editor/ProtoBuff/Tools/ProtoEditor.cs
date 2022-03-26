@@ -12,7 +12,7 @@ public static class ProtoEditor
         string protoc = @Application.dataPath + ProtoDefine.protoc;
         string protoPath= @Application.dataPath + ProtoDefine.protoPath;
         string csharpOut = @Application.dataPath + ProtoDefine.csharpOut;
-
+        string includePath = @Application.dataPath + ProtoDefine.include;
         CommandRunner command = new CommandRunner(protoc,protoPath);
         List<string> paths = FileTools.GetDirectorys(protoPath);
         List<string> protos = FileTools.GetAllFilesInRoot(protoPath,"*.proto");
@@ -22,6 +22,11 @@ public static class ProtoEditor
         sb.Append(ProtoDefine.space);
         sb.Append(ProtoDefine.command_csharp_out);
         sb.Append(csharpOut);
+
+        //设置include 路径
+        sb.Append(ProtoDefine.space);
+        sb.Append(ProtoDefine.command_proto_path);
+        sb.Append(includePath);
 
         //设置proto文件路径
         sb.Append(ProtoDefine.space);
@@ -42,6 +47,7 @@ public static class ProtoEditor
             sb.Append(protos[i]);
         }
         string args = sb.ToString();
+        Debug.Log(args);
         //开始转换
         string result=  command.Run(args);
         AssetDatabase.Refresh();
@@ -50,6 +56,7 @@ public static class ProtoEditor
 public class ProtoDefine
 {
     public const string protoc = "/Editor/ProtoBuff/bin/protoc.exe";
+    public const string include = "/Editor/ProtoBuff/include";
     public const string protoPath = "/Data/Proto";
     public const string csharpOut = "/Scripts/ProtoBuff/CSharp";
 
