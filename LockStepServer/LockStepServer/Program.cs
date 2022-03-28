@@ -9,11 +9,15 @@ using System.Timers;
 using Google.Protobuf;
 using LockStepServer.Common;
 using Any =Google.Protobuf.WellKnownTypes.Any;
+using System.Threading;
+
 namespace LockStepServer
 {
     class Program
     {
         static Dictionary<int, FrameData> frames = new Dictionary<int, FrameData>();
+        static Dictionary<int, long> matchPools = new Dictionary<int, long>();
+        static Dictionary<int, SocketConnection> connections = new Dictionary<int, SocketConnection>();
         static Queue<Command> commandBuffer = new Queue<Command>();
         static int frameCount;
         static SocketServer server;
@@ -34,8 +38,26 @@ namespace LockStepServer
                         respond.ID = UIDHelper.GetUID();
                         Server2ClientData respondData = new Server2ClientData();
                         respondData.CommandID = MessageID.Login;
-                        respondData.Data = Any.Pack(respond); ;
+                        respondData.Data = Any.Pack(respond);
+                        connections.Add(respond.ID,client);
                         client.Send(respondData.ToByteArray());
+                        break;
+                    case MessageID.Match:
+                        MatchRequest request = data.Data.Unpack<MatchRequest>();
+                        if (request.Match)//开始匹配
+                        {
+                            if (!matchPools.ContainsKey(request.Uid))
+                            {
+                                matchPools.Add(request.Uid,DateTime.Now.Ticks);
+                            }
+                        }
+                        else//取消匹配
+                        {
+                            if (matchPools.ContainsKey(request.Uid))
+                            {
+                                matchPools.Remove(request.Uid);
+                            }
+                        }
                         break;
                 }
                 //int num = frameCount;
@@ -59,6 +81,10 @@ namespace LockStepServer
             //处理客户端连接关闭后的事件
             server.HandleClientClose = new Action<SocketConnection, SocketServer>((theCon, theServer) =>
             {
+                if (connections.ContainsValue(theCon))
+                {
+
+                }
                 Console.WriteLine($@"一个客户端关闭，当前连接数为：{theServer.GetConnectionCount()}");
             });
 
@@ -71,11 +97,43 @@ namespace LockStepServer
             //服务器启动
             server.StartServer();
 
+            IntervalDo(Match);
             //Timer aTimer = new Timer();
             //aTimer.Elapsed += new ElapsedEventHandler(StepLogic);
             //aTimer.Interval = 1000/20;    //配置文件中配置的秒数
             //aTimer.Enabled = true;
             Console.Read();
+        }
+
+        public static void IntervalDo(System.Action<object,ElapsedEventArgs> action)
+        {
+            System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer.Elapsed += new ElapsedEventHandler(action);
+            aTimer.Interval = 1000/20;    //配置文件中配置的秒数
+            aTimer.Enabled = true;
+
+        }
+        //匹配算法
+        static void Match(object sender, ElapsedEventArgs args)
+        {
+            List<int> matching= matchPools.Keys.ToList();
+            int count = matching.Count;
+            for (int i = 0; i < count-1;)
+            {
+                int user1 = matching[i];
+                int user2 = matching[i + 1];
+                i += 2;
+                matchPools.Remove(user1);
+                matchPools.Remove(user2);
+                CreateBattle(user1,user2);
+            }
+        }
+        static void CreateBattle(int user1, int user2)
+        {
+            Battle battle = new Battle(user1, user2, connections);
+            Thread thread = new Thread(battle.Start);
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         static void StepLogic(object sender, ElapsedEventArgs e)

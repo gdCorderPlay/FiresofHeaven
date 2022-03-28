@@ -13,7 +13,7 @@ public class Main : MonoBehaviour
     {
         mainView  = new MainView();
         Loom loom = Loom.Instance;
-        MessageMgr.Instance.AddListener("StartBattle", StartBattle);
+        MessageMgr.Instance.AddListener("OnMatchRespond", StartBattle);
         MessageMgr.Instance.AddListener<FrameData>("LockStepLogic", StepLogic);
         MessageMgr.Instance.AddListener<LoginRespond>("OnLoginRespond", OnLoginRespond);
         socket = new SimpleSocket();
@@ -40,19 +40,32 @@ public class Main : MonoBehaviour
     }
     private void StartBattle()//匹配到对手
     {
-
+        mainView.Hide();
+        Debug.Log("成功匹配到对手");
 
     }
 
     private void WaitBattle()//匹配对手
     {
-
+        Proto.Data.Client2ServerData sendData = new Client2ServerData();
+        sendData.CommandID = MessageID.Match;
+        MatchRequest request = new MatchRequest();
+        request.Uid = StaticDef.UID;
+        request.Match = true;
+        sendData.Data = Google.Protobuf.WellKnownTypes.Any.Pack(request);
+        socket.SendData2Server(sendData);
 
     }
     private void CancleBattle()//取消匹配
     {
 
-
+        Proto.Data.Client2ServerData sendData = new Client2ServerData();
+        sendData.CommandID = MessageID.Match;
+        MatchRequest request = new MatchRequest();
+        request.Uid = StaticDef.UID;
+        request.Match = false;
+        sendData.Data = Google.Protobuf.WellKnownTypes.Any.Pack(request);
+        socket.SendData2Server(sendData);
     }
 
     // Update is called once per frame

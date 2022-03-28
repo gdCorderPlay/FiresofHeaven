@@ -16,12 +16,17 @@ public enum SoldierAnimState
 public class MessageID
 {
     public const int Heat = 100;//心跳
-    public const int Login = 10001;//
+    public const int Login = 10001;//登录
+    public const int Match = 10002;//匹配对手
+    public const int MatchResond = 10003;//匹配结果
+
 
 }
 
 public class StaticDef
 {
     public static int UID;
+
+    public static int playerMode;//分配的类型 0：红方 1：蓝方
 
 }

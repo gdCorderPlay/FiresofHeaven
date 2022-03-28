@@ -57,7 +57,15 @@ public class SimpleSocket
                     {
                         MessageMgr.Instance.SendMsg<LoginRespond>("OnLoginRespond", respond);
                     });
-                    break; 
+                    break;
+                case MessageID.MatchResond:
+                    MatchRespond matchRespond = serverData.Data.Unpack<MatchRespond>();
+                    StaticDef.playerMode = matchRespond.Mode;
+                    Loom.AddNetMsgHandle(() =>
+                    {
+                        MessageMgr.Instance.SendMsg("OnMatchRespond");
+                    });
+                    break;
             }
             //FrameData frame = FrameData.Parser.ParseFrom(data);
             //Loom.AddNetMsgHandle(() =>
