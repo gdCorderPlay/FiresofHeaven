@@ -19,7 +19,7 @@ public class SimpleSocket
     {
         //创建实例
         socketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        IPAddress ip = IPAddress.Parse("127.0.0.1");
+        IPAddress ip = IPAddress.Parse("192.168.0.103");
         IPEndPoint point = new IPEndPoint(ip, 2333);
         //进行连接
         socketClient.Connect(point);
@@ -66,28 +66,32 @@ public class SimpleSocket
                         MessageMgr.Instance.SendMsg("OnMatchRespond");
                     });
                     break;
+                case MessageID.RemoteFuction:
+                    FrameData frame = serverData.Data.Unpack<FrameData>();
+                    Loom.AddNetMsgHandle(() =>
+                    {
+                        MessageMgr.Instance.SendMsg("LockStepLogic", frame);
+                    });
+                    break;
             }
-            //FrameData frame = FrameData.Parser.ParseFrom(data);
-            //Loom.AddNetMsgHandle(() =>
-            //{
-            //    MessageMgr.Instance.SendMsg<FrameData>("LockStepLogic",frame);
-            //});
         }
     }
     public static int playerID=1;
-    public void sendBattleRecordToServer(int commandID)
-    {
-        Command command = new Command();
-        command.CommandID = commandID;
-        command.PlayerID = playerID;
-        byte[] data = command.ToByteArray();
-        Debug.Log(commandID+"  length:" +data.Length);
-        socketClient.Send(data);
-        // var temp = socketClient.Send(command.GetData());
-    }
+    
     public void SendData2Server(Client2ServerData sendData)
     {
         byte[] data = sendData.ToByteArray();
         socketClient.Send(data);
+    }
+    public void Close()
+    {
+        try
+        {
+            socketClient.Shutdown(SocketShutdown.Both);
+        }
+        finally
+        {
+            socketClient.Close();
+        }
     }
 }

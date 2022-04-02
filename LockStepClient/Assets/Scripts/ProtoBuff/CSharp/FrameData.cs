@@ -24,14 +24,15 @@ namespace Proto.Data {
     static FrameDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg9GcmFtZURhdGEucHJvdG8SClByb3RvLkRhdGEiLgoHQ29tbWFuZBIQCghw",
-            "bGF5ZXJJRBgBIAEoBRIRCgljb21tYW5kSUQYAiABKAUiRgoJRnJhbWVEYXRh",
-            "EhIKCmZyYW1lQ291bnQYASABKAUSJQoIY29tbWFuZHMYAiADKAsyEy5Qcm90",
-            "by5EYXRhLkNvbW1hbmRCDaoCClByb3RvLkRhdGFiBnByb3RvMw=="));
+            "Cg9GcmFtZURhdGEucHJvdG8SClByb3RvLkRhdGEiQgoHQ29tbWFuZBIMCgRt",
+            "b2RlGAEgASgFEhMKC3NvbGRpZXJUeXBlGAIgASgFEgkKAXgYAyABKAUSCQoB",
+            "eRgEIAEoBSJGCglGcmFtZURhdGESEgoKZnJhbWVDb3VudBgBIAEoBRIlCghj",
+            "b21tYW5kcxgCIAMoCzITLlByb3RvLkRhdGEuQ29tbWFuZEINqgIKUHJvdG8u",
+            "RGF0YWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.Data.Command), global::Proto.Data.Command.Parser, new[]{ "PlayerID", "CommandID" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.Data.Command), global::Proto.Data.Command.Parser, new[]{ "Mode", "SoldierType", "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Proto.Data.FrameData), global::Proto.Data.FrameData.Parser, new[]{ "FrameCount", "Commands" }, null, null, null, null)
           }));
     }
@@ -73,8 +74,10 @@ namespace Proto.Data {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Command(Command other) : this() {
-      playerID_ = other.playerID_;
-      commandID_ = other.commandID_;
+      mode_ = other.mode_;
+      soldierType_ = other.soldierType_;
+      x_ = other.x_;
+      y_ = other.y_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -84,27 +87,51 @@ namespace Proto.Data {
       return new Command(this);
     }
 
-    /// <summary>Field number for the "playerID" field.</summary>
-    public const int PlayerIDFieldNumber = 1;
-    private int playerID_;
+    /// <summary>Field number for the "mode" field.</summary>
+    public const int ModeFieldNumber = 1;
+    private int mode_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerID {
-      get { return playerID_; }
+    public int Mode {
+      get { return mode_; }
       set {
-        playerID_ = value;
+        mode_ = value;
       }
     }
 
-    /// <summary>Field number for the "commandID" field.</summary>
-    public const int CommandIDFieldNumber = 2;
-    private int commandID_;
+    /// <summary>Field number for the "soldierType" field.</summary>
+    public const int SoldierTypeFieldNumber = 2;
+    private int soldierType_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CommandID {
-      get { return commandID_; }
+    public int SoldierType {
+      get { return soldierType_; }
       set {
-        commandID_ = value;
+        soldierType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "x" field.</summary>
+    public const int XFieldNumber = 3;
+    private int x_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int X {
+      get { return x_; }
+      set {
+        x_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "y" field.</summary>
+    public const int YFieldNumber = 4;
+    private int y_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Y {
+      get { return y_; }
+      set {
+        y_ = value;
       }
     }
 
@@ -123,8 +150,10 @@ namespace Proto.Data {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerID != other.PlayerID) return false;
-      if (CommandID != other.CommandID) return false;
+      if (Mode != other.Mode) return false;
+      if (SoldierType != other.SoldierType) return false;
+      if (X != other.X) return false;
+      if (Y != other.Y) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -132,8 +161,10 @@ namespace Proto.Data {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerID != 0) hash ^= PlayerID.GetHashCode();
-      if (CommandID != 0) hash ^= CommandID.GetHashCode();
+      if (Mode != 0) hash ^= Mode.GetHashCode();
+      if (SoldierType != 0) hash ^= SoldierType.GetHashCode();
+      if (X != 0) hash ^= X.GetHashCode();
+      if (Y != 0) hash ^= Y.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -152,13 +183,21 @@ namespace Proto.Data {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerID != 0) {
+      if (Mode != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerID);
+        output.WriteInt32(Mode);
       }
-      if (CommandID != 0) {
+      if (SoldierType != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(CommandID);
+        output.WriteInt32(SoldierType);
+      }
+      if (X != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(X);
+      }
+      if (Y != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Y);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -170,13 +209,21 @@ namespace Proto.Data {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerID != 0) {
+      if (Mode != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerID);
+        output.WriteInt32(Mode);
       }
-      if (CommandID != 0) {
+      if (SoldierType != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(CommandID);
+        output.WriteInt32(SoldierType);
+      }
+      if (X != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(X);
+      }
+      if (Y != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Y);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -188,11 +235,17 @@ namespace Proto.Data {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerID != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerID);
+      if (Mode != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Mode);
       }
-      if (CommandID != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CommandID);
+      if (SoldierType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SoldierType);
+      }
+      if (X != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
+      }
+      if (Y != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -206,11 +259,17 @@ namespace Proto.Data {
       if (other == null) {
         return;
       }
-      if (other.PlayerID != 0) {
-        PlayerID = other.PlayerID;
+      if (other.Mode != 0) {
+        Mode = other.Mode;
       }
-      if (other.CommandID != 0) {
-        CommandID = other.CommandID;
+      if (other.SoldierType != 0) {
+        SoldierType = other.SoldierType;
+      }
+      if (other.X != 0) {
+        X = other.X;
+      }
+      if (other.Y != 0) {
+        Y = other.Y;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -228,11 +287,19 @@ namespace Proto.Data {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerID = input.ReadInt32();
+            Mode = input.ReadInt32();
             break;
           }
           case 16: {
-            CommandID = input.ReadInt32();
+            SoldierType = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            X = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Y = input.ReadInt32();
             break;
           }
         }
@@ -251,11 +318,19 @@ namespace Proto.Data {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            PlayerID = input.ReadInt32();
+            Mode = input.ReadInt32();
             break;
           }
           case 16: {
-            CommandID = input.ReadInt32();
+            SoldierType = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            X = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Y = input.ReadInt32();
             break;
           }
         }

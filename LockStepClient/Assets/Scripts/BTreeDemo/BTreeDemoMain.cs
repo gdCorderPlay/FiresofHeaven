@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Battle.Logic;
+using Proto.Data;
+using System;
+using Google.Protobuf.Collections;
+
 public class BTreeDemoMain : MonoBehaviour
 {
     public UIMain UI;
@@ -18,8 +22,22 @@ public class BTreeDemoMain : MonoBehaviour
         battle = new BattleLogic();
         soldiersAtk = battle.battleData.mAtcSoldierList;
         soldiersDef = battle.battleData.mDefSoldierList;
+        MessageMgr.Instance.AddListener<FrameData>("LockStepLogic", StepLogic);
+        Main.Instance.IsReadyForBattle();
     }
 
+    private void StepLogic(FrameData obj)
+    {
+        CheckRemoteInput(obj.Commands);
+        battle.OnStepUpdate(frame++);
+    }
+    private void CheckRemoteInput(RepeatedField<Command> commands)
+    {
+        for (int i = 0; i < commands.Count; i++)
+        {
+            battle.CreateSoldier((SoldierType)commands[i].SoldierType,commands[i].X*0.001f,commands[i].Y*0.001f,commands[i].Mode==0);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -28,13 +46,14 @@ public class BTreeDemoMain : MonoBehaviour
     int frame;
     private void FixedUpdate()
     {
-        battle.OnStepUpdate(frame++);
+        //battle.OnStepUpdate(frame++);
     }
     void OnSoilderCreateClick(bool isAtk,SoldierType soldierType)
     {
         if (HitGround(out Vector3 hit))
         {
-            battle.CreateSoldier(soldierType, hit.x, hit.z, isAtk);
+            Main.Instance.Create(soldierType,hit.x,hit.z);
+            //battle.CreateSoldier(soldierType, hit.x, hit.z, isAtk);
         }
 
     }

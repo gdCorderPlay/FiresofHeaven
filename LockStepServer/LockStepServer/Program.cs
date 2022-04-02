@@ -28,43 +28,8 @@ namespace LockStepServer
             server = new SocketServer(2333);
 
             //处理从客户端收到的消息
-            server.HandleRecMsg = new Action<byte[], SocketConnection, SocketServer>((bytes, client, theServer) =>
-            {
-                Client2ServerData data = Client2ServerData.Parser.ParseFrom(bytes);
-                switch (data.CommandID)
-                {
-                    case MessageID.Login:
-                        LoginRespond respond = new LoginRespond();
-                        respond.ID = UIDHelper.GetUID();
-                        Server2ClientData respondData = new Server2ClientData();
-                        respondData.CommandID = MessageID.Login;
-                        respondData.Data = Any.Pack(respond);
-                        connections.Add(respond.ID,client);
-                        client.Send(respondData.ToByteArray());
-                        break;
-                    case MessageID.Match:
-                        MatchRequest request = data.Data.Unpack<MatchRequest>();
-                        if (request.Match)//开始匹配
-                        {
-                            if (!matchPools.ContainsKey(request.Uid))
-                            {
-                                matchPools.Add(request.Uid,DateTime.Now.Ticks);
-                            }
-                        }
-                        else//取消匹配
-                        {
-                            if (matchPools.ContainsKey(request.Uid))
-                            {
-                                matchPools.Remove(request.Uid);
-                            }
-                        }
-                        break;
-                }
-                //int num = frameCount;
-                //Command command = Command.Parser.ParseFrom(bytes);
-                //Console.WriteLine(command.CommandID+"::"+command.PlayerID);
-                //commandBuffer.Enqueue(command);
-            });
+            server.HandleRecMsg = HandleRecMsg;
+            
 
             //处理服务器启动后事件
             server.HandleServerStarted = new Action<SocketServer>(theServer =>
@@ -104,6 +69,39 @@ namespace LockStepServer
             //aTimer.Enabled = true;
             Console.Read();
         }
+        public static void HandleRecMsg(byte[] bytes, SocketConnection client, SocketServer theServer)
+        {
+            Client2ServerData data = Client2ServerData.Parser.ParseFrom(bytes);
+            switch (data.CommandID)
+            {
+                case MessageID.Login:
+                    LoginRespond respond = new LoginRespond();
+                    respond.ID = UIDHelper.GetUID();
+                    Server2ClientData respondData = new Server2ClientData();
+                    respondData.CommandID = MessageID.Login;
+                    respondData.Data = Any.Pack(respond);
+                    connections.Add(respond.ID, client);
+                    client.Send(respondData.ToByteArray());
+                    break;
+                case MessageID.Match:
+                    MatchRequest request = data.Data.Unpack<MatchRequest>();
+                    if (request.Match)//开始匹配
+                    {
+                        if (!matchPools.ContainsKey(request.Uid))
+                        {
+                            matchPools.Add(request.Uid, DateTime.Now.Ticks);
+                        }
+                    }
+                    else//取消匹配
+                    {
+                        if (matchPools.ContainsKey(request.Uid))
+                        {
+                            matchPools.Remove(request.Uid);
+                        }
+                    }
+                    break;
+            }
+        }
 
         public static void IntervalDo(System.Action<object,ElapsedEventArgs> action)
         {
@@ -136,41 +134,6 @@ namespace LockStepServer
             thread.Start();
         }
 
-        static void StepLogic(object sender, ElapsedEventArgs e)
-        {
-            int currentFrame = frameCount;
-            frameCount++;
-            lock (lockobj)
-            {
-                FrameData frame = new FrameData();
-                frame.FrameCount = currentFrame;
-                frames.Add(currentFrame, frame);
-                while (commandBuffer.Count > 0)
-                {
-                    frame.Commands.Add(commandBuffer.Dequeue());
-                }
-            }
-
-            Send(currentFrame);
-        }
-        static void Send(int frame)
-        {
-            byte[] data;
-            if (frames.ContainsKey(frame))
-            {
-                data = frames[frame].ToByteArray();
-            }
-            else
-            {
-                FrameData frameData = new FrameData();
-                frameData.FrameCount = frame;
-                data = frameData.ToByteArray();
-            }
-            var clients = server.GetConnectionList();
-            foreach (var client in clients)
-            {
-                client.Send(data);
-            }
-        }
+       
     }
 }

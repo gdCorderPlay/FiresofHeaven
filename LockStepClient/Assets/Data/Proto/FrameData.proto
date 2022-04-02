@@ -4,8 +4,10 @@ option csharp_namespace="Proto.Data";
 package Proto.Data;
 
 message Command{
-int32 playerID=1;
-int32 commandID=2;
+int32 mode=1;
+int32 soldierType=2;
+int32 x=3;
+int32 y=4;
 }
 message FrameData{
 int32 frameCount=1;
