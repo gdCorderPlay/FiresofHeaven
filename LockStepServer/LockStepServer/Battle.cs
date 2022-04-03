@@ -19,7 +19,7 @@ namespace LockStepServer
         private int frameCount;
         private int waitCount = 2;
         private Dictionary<int, SocketConnection> connects;
-        static Dictionary<int, FrameData> frames = new Dictionary<int, FrameData>();
+        private Dictionary<int, FrameData> frames = new Dictionary<int, FrameData>();
         Queue<Command> commandBuffer = new Queue<Command>();
         object lockobj = new object();
         public Battle(int player1, int player2, Dictionary<int, SocketConnection> connects)
@@ -105,8 +105,24 @@ namespace LockStepServer
             Server2ClientData respondData = new Server2ClientData();
             respondData.CommandID = MessageID.RemoteFuction;
             respondData.Data = Any.Pack(frameData);
-            connects[id1].Send(respondData.ToByteArray());
-            connects[id2].Send(respondData.ToByteArray());
+            
+            if (connects.ContainsKey(id1))
+            {
+                SocketConnection player1 = connects[id1];
+                if (player1 != null)
+                {
+                    player1.Send(respondData.ToByteArray());
+                }
+            }
+            if (connects.ContainsKey(id2))
+            {
+                SocketConnection player2 = connects[id2];
+                if (player2 != null)
+                {
+                    player2.Send(respondData.ToByteArray());
+                }
+            }
+           
         }
     }
 }

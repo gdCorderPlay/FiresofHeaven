@@ -93,6 +93,15 @@ namespace Battle.Logic
             }
             return tree;
         }
+        public static int GetMaxHp(SoldierType type)
+        {
+            int hp = 0;
+            if (configs.ContainsKey(type))
+            {
+                hp = configs[type].hp;
+            }
+            return hp;
+        }
     }
 }
 

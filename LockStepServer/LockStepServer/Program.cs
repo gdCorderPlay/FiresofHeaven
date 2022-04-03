@@ -46,9 +46,14 @@ namespace LockStepServer
             //处理客户端连接关闭后的事件
             server.HandleClientClose = new Action<SocketConnection, SocketServer>((theCon, theServer) =>
             {
-                if (connections.ContainsValue(theCon))
+                int userID = (int)theCon.Property;
+                if (connections.ContainsKey(userID))
                 {
-
+                    connections.Remove(userID);
+                }
+                if (matchPools.ContainsKey(userID))
+                {
+                    matchPools.Remove(userID);
                 }
                 Console.WriteLine($@"一个客户端关闭，当前连接数为：{theServer.GetConnectionCount()}");
             });
@@ -80,6 +85,7 @@ namespace LockStepServer
                     Server2ClientData respondData = new Server2ClientData();
                     respondData.CommandID = MessageID.Login;
                     respondData.Data = Any.Pack(respond);
+                    client.Property = respond.ID;
                     connections.Add(respond.ID, client);
                     client.Send(respondData.ToByteArray());
                     break;

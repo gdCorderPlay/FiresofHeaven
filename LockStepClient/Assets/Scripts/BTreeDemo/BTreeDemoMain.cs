@@ -28,8 +28,9 @@ public class BTreeDemoMain : MonoBehaviour
 
     private void StepLogic(FrameData obj)
     {
+        UI.ShowFrameCount(obj.FrameCount);
         CheckRemoteInput(obj.Commands);
-        battle.OnStepUpdate(frame++);
+        battle.OnStepUpdate(obj.FrameCount);
     }
     private void CheckRemoteInput(RepeatedField<Command> commands)
     {
@@ -42,6 +43,8 @@ public class BTreeDemoMain : MonoBehaviour
     void Update()
     {
         battle.OnRenderUpdate(Time.deltaTime);
+        UI.UpdateHeadInfos(soldiersAtk, battle.battleView);
+        UI.UpdateHeadInfos(soldiersDef, battle.battleView);
     }
     int frame;
     private void FixedUpdate()

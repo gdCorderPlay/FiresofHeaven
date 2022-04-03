@@ -36,7 +36,6 @@ namespace Battle.Logic
 
             DoSoldierLogic();
             CalBattleResults();
-
         }
 
         BTreeOutputData m_Output = new BTreeOutputData();
@@ -108,7 +107,7 @@ namespace Battle.Logic
             soldier.x = x;
             soldier.y = y;
             soldier.isAtkTroop = isAtk;
-            soldier.hp = 100;
+            soldier.hp = TroopHelper.GetMaxHp(soldierType);
             soldier.ghostTime = 60;
             soldier.dirX = 1;
             battleData.AddSoldier(soldier);
