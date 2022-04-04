@@ -1,14 +1,15 @@
-﻿namespace Battle.Logic
+﻿using TrueSync;
+namespace Battle.Logic
 {
     [System.Serializable]
     public class SoldierData
     {
         public uint key;
         //坐标(表现层数据，不用是整型)
-        public float x;
-        public float y;
-        public float dirX;
-        public float dirY;
+        public FP x;
+        public FP y;
+        public FP dirX;
+        public FP dirY;
         //是否是进攻方
         public bool isAtkTroop;
         //部队状态

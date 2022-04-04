@@ -22,7 +22,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 using BTreeFrame;
-
+using TrueSync;
 namespace Battle.Logic.AI.BTree
 {
     public class IsInAttackRangeCondition : BTreeNodePrecondition
@@ -43,7 +43,7 @@ namespace Battle.Logic.AI.BTree
                 uint atkDis = TroopHelper.GetTroopAtkDis(troop.type);
                 uint myRange = TroopHelper.GetTroopRange(troop.type);
                 uint tarRange = TroopHelper.GetTroopRange(tarTroop.type);
-                float dis = MathHelper.SoldierDistanceV2(troop, tarTroop);
+                FP dis = MathHelper.SoldierDistanceV2(troop, tarTroop);
                 if (dis > atkDis + myRange + tarRange)
                 {
                     return false;

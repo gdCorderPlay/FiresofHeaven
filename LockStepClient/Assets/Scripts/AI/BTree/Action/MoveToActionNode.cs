@@ -22,7 +22,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 using BTreeFrame;
-
+using TrueSync;
 namespace Battle.Logic.AI.BTree
 {
     public class MoveToActionNode : BTreeNodeAction
@@ -64,7 +64,7 @@ namespace Battle.Logic.AI.BTree
             var tar_x = target.x;
             var tar_y = target.y;
 
-            float dis = MathHelper.Distance(x, y, tar_x, tar_y);
+            FP dis = MathHelper.Distance(x, y, tar_x, tar_y);
 
             outTroop.dirX = (tar_x - x) / dis;
             outTroop.dirY = (tar_y - y) / dis;

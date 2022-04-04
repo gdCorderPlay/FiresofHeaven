@@ -15,7 +15,7 @@ namespace Battle.Logic
         {
             GameObject soldier = CreateSoldier(data.type);
             allSoldiers.Add(data.key,soldier);
-            soldier.transform.position = new Vector3(data.x, 0.45f, data.y);
+            soldier.transform.position = new Vector3(data.x.AsFloat(), 0.45f, data.y.AsFloat());
             
         }
 
@@ -28,8 +28,8 @@ namespace Battle.Logic
         }
         void UpdateSoldierInfo(SoldierData soldier)
         {
-            allSoldiers[soldier.key].transform.position= new Vector3(soldier.x, 0.45f, soldier.y);
-            allSoldiers[soldier.key].transform.rotation = Quaternion.LookRotation(new Vector3(-soldier.dirX, 0, -soldier.dirY), Vector3.up);
+            allSoldiers[soldier.key].transform.position= new Vector3(soldier.x.AsFloat(), 0.45f, soldier.y.AsFloat());
+            allSoldiers[soldier.key].transform.rotation = Quaternion.LookRotation(new Vector3(-soldier.dirX.AsFloat(), 0, -soldier.dirY.AsFloat()), Vector3.up);
             allSoldiers[soldier.key].SetActive(soldier.ghostTime>0);
             allSoldiers[soldier.key].transform.GetComponent<Animator>().SetInteger("state", soldier.state);
         }

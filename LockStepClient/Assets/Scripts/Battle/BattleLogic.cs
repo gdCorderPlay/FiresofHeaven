@@ -3,6 +3,7 @@ using BTreeFrame;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TrueSync;
 namespace Battle.Logic
 {
     public class BattleLogic
@@ -99,13 +100,15 @@ namespace Battle.Logic
                 }
             }
         }
-        public void CreateSoldier(SoldierType soldierType, float x, float y,bool isAtk)
+        public void CreateSoldier(SoldierType soldierType, int x, int y,bool isAtk)
         {
+            FP X = x;
+            FP Y = y;
             SoldierData soldier = new SoldierData();
             soldier.key = UIDHelper.GetUID();
             soldier.type = soldierType;
-            soldier.x = x;
-            soldier.y = y;
+            soldier.x = X / 1000;
+            soldier.y = Y / 1000;
             soldier.isAtkTroop = isAtk;
             soldier.hp = TroopHelper.GetMaxHp(soldierType);
             soldier.ghostTime = 60;

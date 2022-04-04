@@ -23,7 +23,7 @@
 
 using BTreeFrame;
 using System.Collections.Generic;
-
+using TrueSync;
 namespace Battle.Logic.AI.BTree
 {
     public class FindTargetActionNode : BTreeNodeAction
@@ -61,13 +61,13 @@ namespace Battle.Logic.AI.BTree
                 enemys = _input.battleData.mAtcSoldierList;
             }
             //找最近的目标
-            float minDis = float.MaxValue;
+            FP minDis = FP.MaxValue;
             uint targetKey = 0;
             for (int i = 0; i < enemys.Count; i++)
             {
                 if (enemys[i].hp > 0)
                 {
-                    float dis = MathHelper.SoldierDistanceV2(troop, enemys[i]);
+                    FP dis = MathHelper.SoldierDistanceV2(troop, enemys[i]);
                     if (minDis > dis)
                     {
                         minDis = dis;

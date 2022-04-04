@@ -36,7 +36,7 @@ public class BTreeDemoMain : MonoBehaviour
     {
         for (int i = 0; i < commands.Count; i++)
         {
-            battle.CreateSoldier((SoldierType)commands[i].SoldierType,commands[i].X*0.001f,commands[i].Y*0.001f,commands[i].Mode==0);
+            battle.CreateSoldier((SoldierType)commands[i].SoldierType,commands[i].X,commands[i].Y,commands[i].Mode==0);
         }
     }
     // Update is called once per frame
